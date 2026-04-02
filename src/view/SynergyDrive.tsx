@@ -163,6 +163,25 @@ export default function SynergyDrive() {
     }, 1000);
   }, [calculateScore]);
 
+  // Send score to backend API when drive completes
+  const sendScoreToBackend = useCallback(async (score: number) => {
+    try {
+      const response = await fetch("/api/reward", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ score })
+      });
+      const data = await response.json();
+      if (data.success) {
+        console.log("Reward minted, TX:", data.txHash);
+      } else {
+        console.error("Reward error:", data.error);
+      }
+    } catch (err) {
+      console.error("Backend request failed:", err);
+    }
+  }, []);
+
   const stopDrive = useCallback(() => {
     if (watchIdRef.current !== null) {
       navigator.geolocation.clearWatch(watchIdRef.current);
@@ -197,12 +216,17 @@ export default function SynergyDrive() {
         pendingRewards: w.pendingRewards + prev.score,
       }));
 
+      // Send score to backend for token minting
+      if (prev.score > 0) {
+        sendScoreToBackend(prev.score);
+      }
+
       return {
         ...prev,
         isActive: false,
       };
     });
-  }, []);
+  }, [sendScoreToBackend]);
 
   const connectWallet = useCallback(async () => {
     // Simulated wallet connection
