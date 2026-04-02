@@ -7,9 +7,11 @@ interface WalletPanelProps {
   };
   onConnect: () => void;
   onClaim: () => void;
+  isClaiming?: boolean;
+  claimError?: string | null;
 }
 
-export default function WalletPanel({ wallet, onConnect, onClaim }: WalletPanelProps) {
+export default function WalletPanel({ wallet, onConnect, onClaim, isClaiming = false, claimError }: WalletPanelProps) {
   const formatAddress = (address: string): string => {
     if (address.length <= 10) return address;
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
@@ -81,17 +83,37 @@ export default function WalletPanel({ wallet, onConnect, onClaim }: WalletPanelP
         </div>
       </div>
 
+      {/* Claim Error */}
+      {claimError && (
+        <div className="bg-dna-danger/10 border border-dna-danger/30 rounded-lg p-3 text-sm text-dna-danger">
+          {claimError}
+        </div>
+      )}
+
       {/* Claim Button */}
       {wallet.pendingRewards > 0 && (
         <button
           onClick={onClaim}
-          className="w-full py-3 px-4 bg-gradient-to-r from-dna-accent to-dna-cyan text-dna-bg font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+          disabled={isClaiming}
+          className="w-full py-3 px-4 bg-gradient-to-r from-dna-accent to-dna-cyan text-dna-bg font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           aria-label="Claim pending rewards"
         >
-          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" strokeLinecap="round" />
-          </svg>
-          Claim {wallet.pendingRewards.toLocaleString()} DNAC
+          {isClaiming ? (
+            <>
+              <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
+                <path d="M12 2a10 10 0 0110 10" strokeLinecap="round" />
+              </svg>
+              Claiming...
+            </>
+          ) : (
+            <>
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" strokeLinecap="round" />
+              </svg>
+              Claim {wallet.pendingRewards.toLocaleString()} DNAC
+            </>
+          )}
         </button>
       )}
     </div>

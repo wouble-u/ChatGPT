@@ -236,22 +236,54 @@ export default function SynergyDrive() {
     }
   }, []);
 
+  const [isClaiming, setIsClaiming] = useState(false);
+  const [claimError, setClaimError] = useState<string | null>(null);
+
   const claimRewards = useCallback(async () => {
-    if (wallet.pendingRewards <= 0) return;
+    if (wallet.pendingRewards <= 0 || !wallet.address) return;
 
-    // In production: await contract.claimReward()
-    setWallet(prev => ({
-      ...prev,
-      balance: prev.balance + prev.pendingRewards,
-      pendingRewards: 0,
-    }));
+    setIsClaiming(true);
+    setClaimError(null);
 
-    setSessions(prev => 
-      prev.map(s => 
-        s.status === 'completed' ? { ...s, status: 'claimed' as const } : s
-      )
-    );
-  }, [wallet.pendingRewards]);
+    try {
+      // Call backend API to mint tokens
+      const response = await fetch('/api/reward', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          score: wallet.pendingRewards,
+          walletAddress: wallet.address,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Failed to claim rewards');
+      }
+
+      // Update local state after successful claim
+      setWallet(prev => ({
+        ...prev,
+        balance: prev.balance + prev.pendingRewards,
+        pendingRewards: 0,
+      }));
+
+      setSessions(prev => 
+        prev.map(s => 
+          s.status === 'completed' ? { ...s, status: 'claimed' as const } : s
+        )
+      );
+
+    } catch (error) {
+      console.error('Claim failed:', error);
+      setClaimError(error instanceof Error ? error.message : 'Claim failed');
+    } finally {
+      setIsClaiming(false);
+    }
+  }, [wallet.pendingRewards, wallet.address]);
 
   // Haversine formula for distance calculation
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
@@ -326,6 +358,8 @@ export default function SynergyDrive() {
           wallet={wallet}
           onConnect={connectWallet}
           onClaim={claimRewards}
+          isClaiming={isClaiming}
+          claimError={claimError}
         />
 
         {/* Drive History */}
