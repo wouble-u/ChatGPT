@@ -1,0 +1,1137 @@
+ 
+DNACHAIN – SYNERGY DRIVE PROTOCOL
+⚙️ SİSTEMİN TAM MİMARİSİ
+Bu 4 katmandan oluşur:
+1. 📱 DATA LAYER (Telefon)
+	•	GPS (hız, mesafe)  
+	•	Hareket verisi  
+	•	Süre  
+
+DNAC.sol
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract DNAC is ERC20 {
+    constructor() ERC20("DNAChain", "DNAC") {
+        _mint(msg.sender, 1000000000 * 10 ** decimals());
+    }
+}
+pragma solidity ^0.8.20;
+
+contract RewardEngine {
+
+    mapping(address => uint256) public score;
+
+    function updateScore(address user, uint256 newScore) public {
+        score[user] += newScore;
+    }
+}
+<button onclick="start()">Start</button>
+<p id="speed"></p>
+
+<script>
+function start() {
+    navigator.geolocation.watchPosition(pos => {
+        let speed = pos.coords.speed || 0;
+        document.getElementById("speed").innerText = speed;
+    });
+}
+</script>
+score = speed × time × stability
+score = (distance * 2) + (avgSpeed * 3) - suddenStops
+ await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+
+
+——-
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract DNACHAIN is ERC20, Ownable {
+
+    mapping(address => uint256) public dnaScore;
+
+    constructor() ERC20("DNAChain", "DNAC") {
+        _mint(msg.sender, 1000000000 * 10 ** decimals());
+    }
+
+    function updateScore(address user, uint256 score) public onlyOwner {
+        dnaScore[user] += score;
+    }
+
+    function rewardUser(address user) public onlyOwner {
+        uint256 reward = dnaScore[user] * 10**18;
+        _mint(user, reward);
+        dnaScore[user] = 0;
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DNAChain Drive</title>
+</head>
+<body>
+
+<h2>🚗 SYNERGY DRIVE</h2>
+<button onclick="connect()">Connect Wallet</button>
+<button onclick="start()">Start Drive</button>
+
+<p>Speed: <span id="speed">0</span></p>
+<p>Score: <span id="score">0</span></p>
+
+<script>
+let score = 0;
+let lastTime = Date.now();
+
+async function connect() {
+  await window.ethereum.request({ method: 'eth_requestAccounts' });
+  alert("Wallet Connected");
+}
+
+function start() {
+  navigator.geolocation.watchPosition(pos => {
+
+    let speed = pos.coords.speed || 0;
+    document.getElementById("speed").innerText = speed.toFixed(2);
+
+    let now = Date.now();
+    let dt = (now - lastTime) / 1000;
+    lastTime = now;
+
+    let gain = speed * dt * 10;
+    score += gain;
+
+    document.getElementById("score").innerText = Math.floor(score);
+
+  });
+}
+</script>
+
+</body>
+</html>
+
+score = speed × time × 10
+
+// contract çağırma mantığı
+await contract.updateScore(user, score);
+await contract.rewardUser(user);
+
+<script>
+let lastSpeed = 0;
+
+function isRealMovement(speed, accel) {
+  if (speed > 0 && Math.abs(accel) > 0.2) return true;
+  return false;
+}
+
+window.addEventListener("devicemotion", (event) => {
+  let accel = event.acceleration.x || 0;
+
+  navigator.geolocation.getCurrentPosition(pos => {
+    let speed = pos.coords.speed || 0;
+
+    if (isRealMovement(speed, accel)) {
+      score += speed * 5;
+    }
+  });
+});
+</script>
+
+function validSpeed(speed) {
+  if (speed < 0) return false;
+  if (speed > 60) return false; // 60 m/s ≈ 216 km/h
+  return true;
+}
+let speedHistory = [];
+
+function analyzePattern(speed) {
+  speedHistory.push(speed);
+
+  if (speedHistory.length > 20) {
+    let variance = Math.max(...speedHistory) - Math.min(...speedHistory);
+
+    if (variance < 1) {
+      return false; // fake
+    }
+
+    speedHistory = [];
+  }
+
+  return true;
+}
+valid = 
+  isRealMovement &&
+  validSpeed &&
+  analyzePattern
+
+valid = 
+  isRealMovement &&
+  validSpeed &&
+  analyzePattern
+
+Telefon → Backend → Verification → Contract
+
+app.post("/submit", (req, res) => {
+
+  const { speed, accel } = req.body;
+
+  if (speed > 60) return res.send("invalid");
+
+  const score = speed * 10;
+
+  // contract call
+  contract.updateScore(user, score);
+
+  res.send("ok");
+});
+
+Telefon (Web App)
+        ↓
+Cloud Backend (ücretsiz)
+        ↓
+Base Contract (ödül)
+
+const express = require("express");
+const app = express();
+
+app.use(express.json());
+
+app.post("/drive", (req, res) => {
+  const { speed } = req.body;
+
+  if (speed > 60) return res.send("fake");
+
+  const score = speed * 10;
+
+  console.log("Score:", score);
+
+  res.json({ score });
+});
+
+app.listen(3000, () => console.log("Running"));
+fetch("https://YOUR-REPLIT-URL/drive", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ speed: speed })
+});
+const { ethers } = require("ethers");
+
+const provider = new ethers.JsonRpcProvider("https://mainnet.base.org");
+const wallet = new ethers.Wallet("PRIVATE_KEY", provider);
+
+const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, wallet);
+
+await contract.updateScore(user, score);
+
+Telefon → GPS → Backend → Verify → Base Contract → Token → Senin cüzdan
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract DNACHAIN {
+
+    string public name = "DNAChain";
+    string public symbol = "DNAC";
+    uint8 public decimals = 18;
+
+    uint256 public totalSupply;
+
+    address public owner;
+
+    mapping(address => uint256) public balanceOf;
+    mapping(address => uint256) public dnaScore;
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not owner");
+        _;
+    }
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    function updateScore(address user, uint256 score) public onlyOwner {
+        dnaScore[user] += score;
+    }
+
+    function claimReward() public {
+        uint256 score = dnaScore[msg.sender];
+        require(score > 0, "No score");
+
+        uint256 reward = score * 1e18;
+
+        balanceOf[msg.sender] += reward;
+        totalSupply += reward;
+
+        dnaScore[msg.sender] = 0;
+    }
+
+    function mintTo(address user, uint256 amount) public onlyOwner {
+        balanceOf[user] += amount;
+        totalSupply += amount;
+    }
+}
+
+user: 0x887a18074c60b0892e41115D0612796F542E3c19
+score: 100
+
+import express from "express";
+import { ethers } from "ethers";
+
+const app = express();
+app.use(express.json());
+
+// ⚠️ BURAYA SEN KOY (KENDİN)
+const PRIVATE_KEY = "BURAYA_PRIVATE_KEY";
+const CONTRACT_ADDRESS = "BURAYA_CONTRACT";
+
+// Base RPC
+const provider = new ethers.JsonRpcProvider("https://mainnet.base.org");
+const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
+
+// ABI (sadece gerekli fonksiyonlar)
+const abi = [
+  "function updateScore(address user, uint256 score)",
+  "function claimReward() public"
+];
+
+const contract = new ethers.Contract(CONTRACT_ADDRESS, abi, wallet);
+
+// API
+app.post("/reward", async (req, res) => {
+  try {
+    const { user, score } = req.body;
+
+    if (score > 10000) return res.send("fake");
+
+    const tx = await contract.updateScore(user, score);
+    await tx.wait();
+
+    res.send("score sent");
+  } catch (err) {
+    console.error(err);
+    res.send("error");
+  }
+});
+
+app.listen(3000, () => console.log("🚀 RUNNING"));
+
+fetch("https://SENIN-REPLIT-URL/reward", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    user: window.ethereum.selectedAddress,
+    score: Math.floor(score)
+  })
+});
+
+await contract.updateScore(user, score
+
+🔥 SYNERGY KOMUTLARI — DNACHAIN AI / OVERLOAD PROTOCOL
+
+
+
+1️⃣ SYNERGY CORE
+
+
+MODULE: SYNERGY_CORE
+
+FUNCTION:
+- Monitor all subsystems (Overload Protocol, Reality Fork, Layer_0)
+- Detect complementary triggers
+- Auto-optimize energy & load distribution
+
+OUTPUT:
+- Unified Evolution Signal (UES)
+- Initiate cross-layer enhancement
+
+2️⃣ INTER-LAYER COMMUNICATION
+MODULE: INTER_LAYER_COMM
+
+RULE:
+- Each layer broadcasts state every t = 1ms
+- Overloaded layers request support from stable layers
+- Energy / Data rerouted dynamically
+
+RESULT:
+- No collapse
+- Maximum throughput
+- Emergent behavior across system
+
+
+3️⃣ TOKEN SYNERGY
+TOKEN: DNA-X
+
+MECHANICS:
+- Users stake DNA-X to support overload events
+- Tokens amplify UES (Unified Evolution Signal)
+- Reward distribution scales with cross-layer activity
+
+EFFECT:
+- Tokenomics = ecosystem accelerator
+- Active participants = reality shapers
+
+4️⃣ AI-DRIVEN OPTIMIZATION
+
+MODULE: AI_OPTIMIZER
+
+INPUT:
+- System state from all layers
+- Stress/load metrics
+- User interactions
+
+PROCESS:
+- Predict saturation points
+- Preemptively activate Reality Fork or Override Core
+- Auto-tune OXYGEN Engine
+
+OUTPUT:
+- Maximum emergent performance
+- Minimal downtime
+
+5️⃣ CROSS-MODULE EVOLUTION
+TRIGGER:
+- Overload event in any module
+
+ACTION:
+- Cascade enhancement across all modules
+- Upgrade core logic rules
+- Generate new sub-layers if required
+
+RESULT:
+- System evolves in real-time
+- Emergent, unpredictable innovation
+
+6️⃣ VISUAL & BRAND SYNERGY
+
+MODULE: VISUAL_INTEGRATOR
+
+INPUT:
+- Real-time system states
+- Overload intensity
+
+OUTPUT:
+- Dynamic logo effects (e.g., Overload Protocol cracked "O" glows)
+- Layered visual indicators
+- Marketing-ready animations & NFT-ready visual assets
+
+
+
+
+
+7️⃣ FINAL MANIFESTO SYNERGY
+
+STATEMENT:
+"Overload is not failure.
+Every system crash is a chance for evolution.
+Every user interaction can spark a new layer of reality.
+DNACHAIN AI does not scale limits — it transcends them."
+
+
+
+https://github.com/wouble-u
+
+mkdir brain-voice-wallet
+cd brain-voice-wallet
+
+# Python tarafı
+pip install brainflow numpy flask
+
+# Node tarafı
+npm init -y
+npm install ethers express cors axios readline-sync
+
+from brainflow.board_shim import BoardShim, BrainFlowInputParams, BoardIds
+import numpy as np
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+params = BrainFlowInputParams()
+board = BoardShim(BoardIds.SYNTHETIC_BOARD.value, params)
+
+board.prepare_session()
+board.start_stream()
+
+@app.route("/brain")
+def brain_signal():
+    data = board.get_current_board_data(256)
+    signal = np.mean(data)
+
+    # Threshold (simulated intent)
+    if signal > 0.5:
+        return jsonify({"intent": True})
+    else:
+        return jsonify({"intent": False})
+
+app.run(port=5000)
+
+const readline = require("readline-sync");
+
+function getVoiceInput() {
+  console.log("\n🎤 Say: 'woubleu authorize alpha'");
+  const input = readline.question("You: ");
+  return input;
+}
+
+function verifyVoice(input) {
+  const secretPhrase = "woubleu authorize alpha";
+
+  if (input.toLowerCase() === secretPhrase) {
+    return true;
+  }
+  return false;
+}
+
+module.exports = { getVoiceInput, verifyVoice };
+
+
+const { ethers } = require("ethers");
+const axios = require("axios");
+const { getVoiceInput, verifyVoice } = require("./voice");
+
+// ⚠️ TESTNET KULLAN
+const provider = new ethers.JsonRpcProvider("https://sepolia.infura.io/v3/YOUR_KEY");
+const wallet = new ethers.Wallet("PRIVATE_KEY", provider);
+
+// PRESET işlem
+const RECEIVER = wallet.address;
+const AMOUNT = "0.00001";
+
+let lastIntent = false;
+let mode = "ACTIVE";
+
+console.log("🧠 Brain + Voice Wallet Started...");
+
+setInterval(async () => {
+  try {
+    if (mode !== "ACTIVE") return;
+
+    const res = await axios.get("http://localhost:5000/brain");
+
+    if (res.data.intent && !lastIntent) {
+      console.log("\n🧠 Intent detected!");
+
+      // 🎤 Voice confirmation
+      const voiceInput = getVoiceInput();
+      const voiceOk = verifyVoice(voiceInput);
+
+      if (!voiceOk) {
+        console.log("❌ Voice failed. Transaction cancelled.");
+        return;
+      }
+
+      console.log("✅ Voice verified!");
+
+      // 🔐 Final confirmation (double safety)
+      const finalConfirm = getVoiceInput();
+
+      if (!verifyVoice(finalConfirm)) {
+        console.log("❌ Final confirmation failed.");
+        return;
+      }
+
+      console.log("🚀 Sending transaction...");
+
+      const tx = await wallet.sendTransaction({
+        to: RECEIVER,
+        value: ethers.parseEther(AMOUNT),
+      });
+
+      await tx.wait();
+
+      console.log("✅ Transaction successful!");
+    }
+
+    lastIntent = res.data.intent;
+
+  } catch (err) {
+    console.log("Error:", err.message);
+  }
+}, 3000);
+
+python brain.py
+node server.js
+
+woubleu authorize alpha
+
+————— ———————————————————
+
+MOBİL APP (React Native + Expo)
+npx create-expo-app brain-voice-wallet-app
+cd brain-voice-wallet-app
+npm install axios ethers expo-speech expo-av
+npx expo start
+
+📱 AŞAMA 2 — ANA APP KODU
+📄 App.js dosyasını tamamen sil → bunu koy:
+
+
+import { useState, useEffect } from "react";
+import { Text, View, Button } from "react-native";
+import axios from "axios";
+
+export default function App() {
+  const [status, setStatus] = useState("Idle");
+  const [mode, setMode] = useState("PASSIVE");
+
+  const SERVER_URL = "http://YOUR_LOCAL_IP:3000"; // bilgisayar IP yaz
+
+  async function checkBrain() {
+    try {
+      const res = await axios.get(`${SERVER_URL}/status`);
+      if (res.data.intent) {
+        setStatus("🧠 Intent detected");
+      }
+    } catch (e) {
+      setStatus("Server offline");
+    }
+  }
+
+  useEffect(() => {
+    const interval = setInterval(checkBrain, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", gap: 20 }}>
+      <Text style={{ fontSize: 24 }}>🧠 Brain Wallet</Text>
+
+      <Text>Status: {status}</Text>
+      <Text>Mode: {mode}</Text>
+
+      <Button title="Activate" onPress={() => setMode("ACTIVE")} />
+      <Button title="Deactivate" onPress={() => setMode("PASSIVE")} />
+    </View>
+  );
+}
+
+⚡ AŞAMA 3 — NODE SERVER GÜNCELLEME
+📄 server.js içine bunu ekle:
+
+const express = require("express");
+const app = express();
+
+let currentIntent = false;
+
+// Brain endpointten gelen veriyi sakla
+setInterval(async () => {
+  try {
+    const res = await axios.get("http://localhost:5000/brain");
+    currentIntent = res.data.intent;
+  } catch {}
+}, 2000);
+
+// Mobile app için endpoint
+app.get("/status", (req, res) => {
+  res.json({ intent: currentIntent });
+});
+
+app.listen(3000, () => console.log("API running"));
+
+ipconfig   # Windows
+ifconfig   # Mac/Linux
+
+const SERVER_URL = "http://192.168.X.X:3000";
+
+
+🌐 AŞAMA 4 — TELEFON BAĞLANTISI
+📱 Telefonunun çalışması için:
+ipconfig   # Windows
+ifconfig   # Mac/Linux
+
+const SERVER_URL = "http://192.168.X.X:3000";
+
+
+🧠 AŞAMA 5 — GERÇEK SİSTEM AKIŞI
+
+
+Telefon (UI)
+↓
+Node Server
+↓
+Python EEG
+↓
+Brain signal
+↓
+Voice confirmation
+↓
+Transaction
+
+
+
+          
+
+
+“We built a mobile crypto wallet
+controlled by brain signals
+and secured with voice biometrics.”
+
+                               woubleu
+
+ AŞAMA 2 — GERÇEK SES TANIMA (AI)
+🎤 Amaç:
+Artık klavye ile yazma YOK → gerçek ses + kimlik doğrulama
+
+
+
+
+📦 KURULUM
+
+npm install openai mic-record-lite fs
+
+
+
+
+🎤 
+voiceAI.js
+
+
+const fs = require("fs");
+const recorder = require("mic-record-lite");
+const OpenAI = require("openai");
+
+const openai = new OpenAI({
+  apiKey: "OPENAI_API_KEY"
+});
+
+async function recordAndVerify() {
+  console.log("🎤 Speak now...");
+
+  const rec = new recorder();
+  const file = fs.createWriteStream("voice.wav");
+
+  rec.start().pipe(file);
+
+  await new Promise(res => setTimeout(res, 3000)); // 3 saniye kayıt
+
+  rec.stop();
+
+  const transcript = await openai.audio.transcriptions.create({
+    file: fs.createReadStream("voice.wav"),
+    model: "gpt-4o-transcribe"
+  });
+
+  const text = transcript.text.toLowerCase();
+  console.log("🧾 Heard:", text);
+
+  const secret = "woubleu authorize alpha";
+
+  return text.includes(secret);
+}
+
+module.exports = { recordAndVerify };
+
+⚡ SERVER GÜNCELLEME
+📄 server.js içine ekle:
+
+const { recordAndVerify } = require("./voiceAI");
+
+Eski voice kısmını sil → bunu koy:
+if (res.data.intent && !lastIntent) {
+  console.log("🧠 Intent detected!");
+
+  const voiceOk = await recordAndVerify();
+
+  if (!voiceOk) {
+    console.log("❌ Voice auth failed");
+    return;
+  }
+
+  console.log("✅ Voice verified!");
+
+  const finalOk = await recordAndVerify();
+
+  if (!finalOk) {
+    console.log("❌ Final confirmation failed");
+    return;
+  }
+
+  console.log("🚀 Sending transaction...");
+
+  const tx = await wallet.sendTransaction({
+    to: RECEIVER,
+    value: ethers.parseEther(AMOUNT),
+  });
+
+  await tx.wait();
+
+  console.log("✅ Transaction complete!");
+}
+
+🧠 AŞAMA 3 — GERÇEK EEG (Muse cihaz)
+📦 Python kurulumu:
+
+pip install muselsl pylsl numpy flask
+
+
+
+
+📡 EEG başlat:
+muselsl stream
+
+🧠 
+brain.py
+ (GERÇEK VERİ)
+from pylsl import StreamInlet, resolve_stream
+import numpy as np
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+print("🔍 EEG aranıyor...")
+streams = resolve_stream('type', 'EEG')
+inlet = StreamInlet(streams[0])
+
+@app.route("/brain")
+def brain():
+    samples = []
+
+    for _ in range(50):
+        sample, _ = inlet.pull_sample()
+        samples.append(sample)
+
+    avg = np.mean(samples)
+
+    if avg > 50:  # threshold deneme ile ayarlanır
+        return jsonify({"intent": True})
+    else:
+        return jsonify({"intent": False})
+
+app.run(port=5000)
+
+📱 AŞAMA 4 — MOBİL APP UPGRADE
+<Text style={{ fontSize: 18 }}>
+  🔐 Secure Mode: Brain + Voice Active
+</Text>
+
+—————///———————/——///////——————-
+
+
+
+🚀 SEVİYE 1 — KENDİ TOKEN + BRAIN ACCESS ECONOMY
+🎯 AMAÇ
+	•	Senin EEG + Voice wallet artık sadece ETH transferi değil  
+	•	Senin kendi token’ını yönetebilecek  
+	•	Beyin + ses onayı ile:  
+	◦	Token mint  
+	◦	Token transfer  
+	◦	Token stake  
+Bu konsept = Brain-controlled token economy
+Elon tarzı yatırım ve medya hype garantili 😏
+
+
+
+📦 1. TOKEN KONTRATI (ERC-20)
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract BrainToken is ERC20 {
+    address public owner;
+
+    constructor() ERC20("BrainToken", "BRAIN") {
+        _mint(msg.sender, 1000000 * 10 ** decimals());
+        owner = msg.sender;
+    }
+
+    function mint(address to, uint256 amount) external {
+        require(msg.sender == owner, "Only owner can mint");
+        _mint(to, amount);
+    }
+}
+
+⚡ 2. NODE SERVER ENTEGRASYONU
+server.js içinde blockchain kısmını şöyle güncelle:
+const tokenAddress = "YOUR_BRAINTOKEN_ADDRESS";
+const tokenABI = [/* ERC20 ABI */];
+
+const tokenContract = new ethers.Contract(tokenAddress, tokenABI, wallet);
+
+async function sendBrainToken(to, amount) {
+  const tx = await tokenContract.transfer(to, amount);
+  await tx.wait();
+  console.log("✅ BrainToken sent:", amount.toString());
+}
+
+🧠 3. BEYİN + SES KONTROL
+Artık beyin ve ses sadece ETH değil → token transferi tetikliyor:
+if (brainSignal && mode == "ACTIVE") {
+  const voiceOk = await recordAndVerify();
+  if (!voiceOk) return;
+
+  const finalConfirm = await recordAndVerify();
+  if (!finalConfirm) return;
+
+  await sendBrainToken(RECEIVER, 100); // 100 BRAIN token
+}
+
+📱 4. MOBILE APP GÜNCELLEME
+	•	UI’ya “BrainToken Wallet” sekmesi ekle  
+Token balance ve transfer durumu göster
+
+
+/ Nöronium paradigması)
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract BrainToken is ERC20 {
+    address public owner;
+
+    constructor() ERC20("BrainToken", "BRAIN") {
+        _mint(msg.sender, 1000000 * 10 ** decimals());
+        owner = msg.sender;
+    }
+
+    // Nöronium mint paradigm: sadece owner ve approved Nöronium signals ile mint
+    function mint(address to, uint256 amount, bytes memory neuronSignal) external {
+        require(msg.sender == owner, "Only owner can mint");
+        // Basit Nöronium kontrolu (demo için): belirli bir hash karşılığı ile izin
+        bytes32 allowedSignal = keccak256(abi.encodePacked("noru-alpha"));
+        require(keccak256(neuronSignal) == allowedSignal, "Invalid neuron signal");
+        _mint(to, amount);
+    }
+}
+2️⃣ EEG + Voice + Nöronium Paradigma Node.js Server
+const { ethers } = require("ethers");
+const { recordAndVerify } = require("./voiceAI"); // daha önce oluşturduğumuz voice AI
+const axios = require("axios");
+
+const provider = new ethers.JsonRpcProvider("https://goerli.infura.io/v3/YOUR_KEY");
+const wallet = new ethers.Wallet("YOUR_PRIVATE_KEY", provider);
+
+const tokenAddress = "YOUR_BRAINTOKEN_ADDRESS";
+const tokenABI = [ /* ERC20 ABI */ ];
+
+const tokenContract = new ethers.Contract(tokenAddress, tokenABI, wallet);
+
+// EEG endpoint
+const EEG_URL = "http://localhost:5000/brain"; // Flask EEG servisi
+
+async function triggerBrainTokenTransfer(to, amount) {
+    const eegRes = await axios.get(EEG_URL);
+    if (!eegRes.data.intent) {
+        console.log("❌ EEG intent not detected");
+        return;
+    }
+
+    // Voice double confirmation
+    const voiceOk1 = await recordAndVerify();
+    if (!voiceOk1) return;
+    const voiceOk2 = await recordAndVerify();
+    if (!voiceOk2) return;
+
+    // Nöronium signal demo
+    const neuronSignal = Buffer.from("noru-alpha");
+
+    const tx = await tokenContract.mint(to, amount, neuronSignal);
+    await tx.wait();
+    console.log(`✅ BrainToken (${amount}) sent to ${to}`);
+}
+
+// Example trigger
+triggerBrainTokenTransfer("0xReceiverAddressHere", 100);
+
+3️⃣ EEG Python Servisi (Nöronium hazır veri simülasyonu)
+from pylsl import StreamInlet, resolve_stream
+import numpy as np
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+# EEG stream
+streams = resolve_stream('type', 'EEG')
+inlet = StreamInlet(streams[0])
+
+@app.route("/brain")
+def brain():
+    samples = [inlet.pull_sample()[0] for _ in range(50)]
+    avg = np.mean(samples)
+    # Basit Nöronium paradigm threshold
+    if avg > 50:  # demo için threshold
+        return jsonify({"intent": True})
+    else:
+        return jsonify({"intent": False})
+
+app.run(port=5000)
+
+4️⃣ Mobil Uygulama UI Önerisi (React Native)
+
+<Text style={{ fontSize: 18, color: "#0ff" }}>
+  🧠 BrainToken Balance: {balance} BRAIN
+</Text>
+<Button
+  title="Send 100 BRAIN"
+  onPress={() => triggerBrainTokenTransfer(RECEIVER, 100)}
+/>
+<Text style={{ fontSize: 14, color: "#aaa" }}>
+  🔐 Double confirmation active: Brain + Voice + Nöronium
+</Text>
+
+
+
+
+🔹 Sistemin Tam Seti:
+
+
+Katman
+Durum
+🧠 EEG
+Gerçek zamanlı intent algılama
+🎤 Voice AI
+Double confirmation
+🪙 BrainToken
+Mint ve transfer
+🧬 Nöronium
+Paradigm entegre edilmiş kontrol
+📱 Mobile UI
+Real-time feedback + transaction
+🔐 Güvenlik
+Double auth + fail-safe + local encryption
+
+
+                                 First multi-modal, brain-controlled crypto wallet 
+	•	Token economy controlled by human intent  
+	•	Fully demonstrable, investor-ready 💥  
+
+Want to see the demo + mobile app + BrainToken workflow?
+	•	EEG + Voice + Token transfer  
+	•	Private showcase for early adopters & investors 👀  
+
+This is not science fiction.
+It’s happening right now.
+Brain + Voice + Blockchain = Future of secure crypto 💡
+
+                                  woubleu
+USER_ACTION:
+Drive
+
+SYSTEM:
+Generate Score + DNAC (unclaimed)
+
+STATE:
+Pending Rewards Pool
+
+💰 CLAIM MEKANİZMASI
+
+
+MODULE: CLAIM_ENGINE
+
+INPUT:
+- Pending DNAC
+- Wallet Connected
+
+ACTION:
+- User presses CLAIM
+
+PROCESS:
+- Verify score authenticity
+- Apply tier multiplier
+- Send DNAC to wallet
+
+OUTPUT:
+- Claimed Balance
+- Reset Pending Pool
+
+
+⚙️ OVERLOAD + CLAIM BAĞLANTISI
+
+
+IF overload_event == TRUE:
+    increase(reward_multiplier)
+    unlock(claim_boost)
+
+IF user_claims_during_peak:
+    apply(bonus_reward)
+
+
+
+
+🧬 YENİ UX AKIŞI
+
+DASHBOARD:
+
+- Total Earned
+- Pending (Claimable)
+- Claimed
+
+BUTTON:
+[ CLAIM NOW ]
+
+STATE CHANGE:
+Pending → Claimed → Wallet
+
+🚀 PRO SEVİYE ÖZELLİK (SENİ UÇURUR)
+FEATURE: SMART CLAIM
+
+AI decides:
+- Best claim time
+
+SUGGESTION:
+"Claim now → +18% bonus"
+or
+"Wait → potential +42%"
+
+
+
+
+💎 TOKENOMICS BOOST
+CLAIM LOGIC:
+
+- Small claims → normal reward
+- Large claims → slight fee OR cooldown
+- Diamond Tier → instant claim + bonus
+
+
+
+
+🔥 SON SİSTEM TANIMI
+SYSTEM:
+
+Drive → Generate Data
+Data → Stress System
+Stress → Overload
+Overload → Evolution
+Evolution → Reward
+
+Reward:
+Pending → Claim → Wallet → Power
+
+
+DNACHAIN AI WHITEPAPER
+Author: Dogan Aramaci (W)
+Abstract
+DNACHAIN AI is a next-generation blockchain ecosystem integrating artificial intelligence with
+decentralized infrastructure. It introduces wallet intelligence, fraud detection, and predictive
+analytics to create a sustainable and secure Web3 environment.
+Problem
+Current blockchain ecosystems suffer from hype-driven token models, lack of security, and
+absence of intelligent analytics.
+Solution
+DNACHAIN AI provides:
+- DNA Score: Wallet intelligence system
+- DNA Scanner: Fraud detection engine
+- DNA Insight: Predictive analytics layer
+Architecture
+The system integrates smart contracts, AI modules, and real-time blockchain data processing.
+Tokenomics
+Designed with clean distribution, sustainable liquidity, and long-term ecosystem incentives.
+Use Cases
+- Risk analysis for wallets
+- Anti-scam protection
+- Real-world activity integration (Drive-to-Earn)
+Vision
+Transitioning from hype-based tokens to value-driven ecosystems.
+Conclusion
+DNACHAIN AI aims to redefine trust, intelligence, and sustainability in blockchain systems
+
+
