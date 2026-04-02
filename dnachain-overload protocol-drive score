@@ -1,0 +1,141 @@
+DNAC.sol
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract DNAC is ERC20 {
+constructor() ERC20("DNAChain", "DNAC") {
+_mint(msg.sender, 1000000000 * 10 ** decimals());
+}
+}
+pragma solidity ^0.8.20;
+
+contract RewardEngine {
+
+mapping(address => uint256) public score;
+function updateScore(address user, uint256 newScore) public {
+    score[user] += newScore;
+}
+}
+<button onclick="start()">Start</button>
+
+<p id="speed"></p> <script> function start() { navigator.geolocation.watchPosition(pos => { let speed = pos.coords.speed || 0; document.getElementById("speed").innerText = speed; }); } </script>
+score = speed × time × stability
+score = (distance * 2) + (avgSpeed * 3) - suddenStops
+await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract DNACHAIN is ERC20, Ownable {
+
+mapping(address => uint256) public dnaScore;
+constructor() ERC20("DNAChain", "DNAC") {
+    _mint(msg.sender, 1000000000 * 10 ** decimals());
+}
+function updateScore(address user, uint256 score) public onlyOwner {
+    dnaScore[user] += score;
+}
+function rewardUser(address user) public onlyOwner {
+    uint256 reward = dnaScore[user] * 10**18;
+    _mint(user, reward);
+    dnaScore[user] = 0;
+}
+}
+
+<!DOCTYPE html> <html> <head> <title>DNAChain Drive</title> </head> <body> <h2>🚗 SYNERGY DRIVE</h2> <button onclick="connect()">Connect Wallet</button> <button onclick="start()">Start Drive</button> <p>Speed: <span id="speed">0</span></p> <p>Score: <span id="score">0</span></p> <script> let score = 0; let lastTime = Date.now(); async function connect() { await window.ethereum.request({ method: 'eth_requestAccounts' }); alert("Wallet Connected"); } function start() { navigator.geolocation.watchPosition(pos => { let speed = pos.coords.speed || 0; document.getElementById("speed").innerText = speed.toFixed(2); let now = Date.now(); let dt = (now - lastTime) / 1000; lastTime = now; let gain = speed * dt * 10; score += gain; document.getElementById("score").innerText = Math.floor(score); }); } </script> </body> </html> score = speed × time × 10
+// contract çağırma mantığı
+await contract.updateScore(user, score);
+await contract.rewardUser(user);
+
+<script> let lastSpeed = 0; function isRealMovement(speed, accel) { if (speed > 0 && Math.abs(accel) > 0.2) return true; return false; } window.addEventListener("devicemotion", (event) => { let accel = event.acceleration.x || 0; navigator.geolocation.getCurrentPosition(pos => { let speed = pos.coords.speed || 0; if (isRealMovement(speed, accel)) { score += speed * 5; } }); }); </script>
+function validSpeed(speed) {
+if (speed < 0) return false;
+if (speed > 60) return false; // 60 m/s ≈ 216 km/h
+return true;
+}
+let speedHistory = [];
+
+function analyzePattern(speed) {
+speedHistory.push(speed);
+
+if (speedHistory.length > 20) {
+let variance = Math.max(...speedHistory) - Math.min(...speedHistory);
+
+if (variance < 1) {
+  return false; // fake
+}
+speedHistory = [];
+}
+
+return true;
+}
+valid =
+isRealMovement &&
+validSpeed &&
+analyzePattern
+Telefon → Backend → Verification → Contract
+
+app.post("/submit", (req, res) => {
+
+const { speed, accel } = req.body;
+
+if (speed > 60) return res.send("invalid");
+
+const score = speed * 10;
+
+// contract call
+contract.updateScore(user, score);
+
+res.send("ok");
+});
+
+Telefon (Web App)
+↓
+Cloud Backend (ücretsiz)
+↓
+Base Contract (ödül)
+const express = require("express");
+const app = express();
+
+app.use(express.json());
+
+app.post("/drive", (req, res) => {
+const { speed } = req.body;
+
+if (speed > 60) return res.send("fake");
+
+const score = speed * 10;
+
+console.log("Score:", score);
+
+res.json({ score });
+});
+
+app.listen(3000, () => console.log("Running"));
+fetch("https://YOUR-REPLIT-URL/drive", {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify({ speed: speed })
+});
+const { ethers } = require("ethers");
+
+const provider = new ethers.JsonRpcProvider("https://mainnet.base.org");
+const wallet = new ethers.Wallet("PRIVATE_KEY", provider);
+
+const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, wallet);
+
+await contract.updateScore(user, score);
+Reading .local/skills/expo/SKILL.md.
+Loaded expo skill
+Now I have all the context. Let me read the first_build.md reference for Expo before creating the artifact.
+Loaded expo skill
+Now I have a clear picture. I'm building a DNAChain Drive mobile app — a drive-to-earn app where users track their driving through GPS, earn a score based on speed × time × safety, and can connect their crypto wallet to receive DNAC token rewards.
+
+Let me create the Expo artifact and start building.
+Now let me kick off image generation and write all the app files in parallel.
+Images are generating in the background. Now let me write all the app files in one big batch:
