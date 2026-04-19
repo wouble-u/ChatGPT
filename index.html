@@ -10,3 +10,55 @@
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DNAC Claim</title>
+</head>
+<body>
+
+<h2>DNAC Claim Panel</h2>
+
+<button onclick="connect()">Connect Wallet</button>
+<button onclick="sendScore()">Send Score</button>
+<button onclick="claim()">Claim Reward</button>
+
+<script type="module">
+import { ethers } from "https://cdn.jsdelivr.net/npm/ethers@6.7.0/+esm";
+
+let signer;
+let contract;
+
+const CONTRACT_ADDRESS = "BURAYA_CONTRACT_ADRES";
+
+const ABI = [
+  "function updateScore(address user, uint256 score)",
+  "function claimReward() public"
+];
+
+async function connect() {
+  const provider = new ethers.BrowserProvider(window.ethereum);
+  await provider.send("eth_requestAccounts", []);
+  signer = await provider.getSigner();
+
+  contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+
+  alert("Wallet connected");
+}
+
+async function sendScore() {
+  const user = await signer.getAddress();
+  const tx = await contract.updateScore(user, 10000000);
+  await tx.wait();
+  alert("Score gönderildi");
+}
+
+async function claim() {
+  const tx = await contract.claimReward();
+  await tx.wait();
+  alert("Token geldi 🚀");
+}
+</script>
+
+</body>
+</html>
